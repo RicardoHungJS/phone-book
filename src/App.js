@@ -1,11 +1,25 @@
-import './App.scss';
-import FormComponent from './components/formComponent/FormComponent'
+import { useRef, useState } from "react";
+import "./App.scss";
+import FormComponentModal from "./components/formComponent/FormComponent";
+import PhoneListComponent from "./components/phoneListComponent/PhoneListComponent";
 
 function App() {
+  const [contacts, setContacts] = useState([]);
+
+  const formModal = useRef(null);
+
+  const addContacts = (contacts) => {
+    setContacts(contacts);
+  };
+
+  const openFormModal = () => {
+    formModal.current.openModal();
+  };
+
   return (
-    <div>
-      <h1>Hola mundo</h1>
-      <FormComponent/>
+    <div className="app-container">
+      <FormComponentModal ref={formModal} addContacts={addContacts} />
+      <PhoneListComponent contacts={contacts} openModal={openFormModal} />
     </div>
   );
 }
