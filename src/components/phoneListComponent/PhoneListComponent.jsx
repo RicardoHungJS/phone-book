@@ -18,38 +18,52 @@ const PhoneListComponent = ({ contacts, openModal }) => {
     openModal();
   };
 
+  const [searchContact, setSearchContact] = useState("");
+
+  const handleChange = (event) => {
+    setSearchContact(event.target.value);
+  };
+
+  const filteredData = listContacts.filter((item) =>
+    item.nombre.toLowerCase().includes(searchContact.toLowerCase())
+  );
+
+  useEffect(() => {
+    console.log(filteredData);
+  }, [filteredData])
+
   const orderContactsNameAlphabetically = () => {
     if (nameDir === false) {
-      setListConstacts(_.orderBy(listContacts, ["nombre"], ["asc"]));
+      setListConstacts(_.orderBy(filteredData, ["nombre"], ["asc"]));
     } else {
-      setListConstacts(_.orderBy(listContacts, ["nombre"], ["desc"]));
+      setListConstacts(_.orderBy(filteredData, ["nombre"], ["desc"]));
     }
     setNameDir(!nameDir);
   };
 
   const orderContactsLastNameAlphabetically = () => {
     if (lastNameDir === true) {
-      setListConstacts(_.orderBy(listContacts, ["apellido"], ["asc"]));
+      setListConstacts(_.orderBy(filteredData, ["apellido"], ["asc"]));
     } else {
-      setListConstacts(_.orderBy(listContacts, ["apellido"], ["desc"]));
+      setListConstacts(_.orderBy(filteredData, ["apellido"], ["desc"]));
     }
     setLastNameDir(!lastNameDir);
   };
 
   const orderContactsCelPhone = () => {
     if (celPhoneDir === true) {
-      setListConstacts(_.orderBy(listContacts, ["celular"], ["asc"]));
+      setListConstacts(_.orderBy(filteredData, ["celular"], ["asc"]));
     } else {
-      setListConstacts(_.orderBy(listContacts, ["celular"], ["desc"]));
+      setListConstacts(_.orderBy(filteredData, ["celular"], ["desc"]));
     }
     setCelPhoneDir(!celPhoneDir);
   };
 
   const orderContactsPhone = () => {
     if (phonwDir === true) {
-      setListConstacts(_.orderBy(listContacts, ["telefono"], ["asc"]));
+      setListConstacts(_.orderBy(filteredData, ["telefono"], ["asc"]));
     } else {
-      setListConstacts(_.orderBy(listContacts, ["telefono"], ["desc"]));
+      setListConstacts(_.orderBy(filteredData, ["telefono"], ["desc"]));
     }
     setPhonwDir(!phonwDir);
   };
@@ -57,6 +71,7 @@ const PhoneListComponent = ({ contacts, openModal }) => {
   return (
     <div className="phone-book-container">
       <h1>Contactos</h1>
+      <input className="search-input" type="text" placeholder="Buscador" onChange={handleChange}/>
       <div className="contact-list-box-header">
         <p className="header-click" onClick={orderContactsNameAlphabetically}>
           Nombre
@@ -75,7 +90,7 @@ const PhoneListComponent = ({ contacts, openModal }) => {
         </p>
       </div>
       <div className="scroll-box">
-        {listContacts.map((contact, i) => {
+        {filteredData.map((contact, i) => {
           return (
             <div className="contact-list-box">
               <p key={`${i}a`}>{contact.nombre}</p>
